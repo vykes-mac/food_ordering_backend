@@ -15,12 +15,18 @@ export default class SignUpUseCase {
   ): Promise<string> {
     const user = await this.authRespository.find(email).catch((_) => null)
     if (user) return Promise.reject('User already exists')
+    let passwordhash
+    if (password) {
+      passwordhash = await this.passwordService.hash(password)
+    } else {
+      passwordhash = undefined
+    }
 
     const userId = await this.authRespository.add(
       name,
       email,
-      await this.passwordService.hash(password),
-      authType
+      authType,
+      passwordhash
     )
     return userId
   }
