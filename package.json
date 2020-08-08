@@ -17,6 +17,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mocha": "^7.0.2",
     "@types/mongoose": "^5.7.29",
+    "@types/redis": "^2.8.25",
     "@types/supertest": "^2.0.10",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
@@ -32,6 +33,7 @@
     "express-validator": "^6.6.0",
     "express-validators": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.21"
+    "mongoose": "^5.9.21",
+    "redis": "^3.0.2"
   }
 }

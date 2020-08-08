@@ -16,8 +16,8 @@ export const signupValidationRules = () => {
 export const signinValidationRules = () => {
   return [
     body('name', 'Name is required')
-      .notEmpty()
-      .if(body('auth_type').not().equals('email')),
+      .if(body('auth_type').not().equals('email'))
+      .notEmpty(),
     body('email', 'Invalid email').not().isEmpty().isEmail().normalizeEmail(),
     body('auth_type', 'Auth type is required').notEmpty(),
     body('password', 'Password is required (min 5 characters)')

@@ -8,6 +8,7 @@ export default class JwtTokenService implements ITokenService {
     let token = jwt.sign({ data: payload }, this.privateKey, {
       issuer: 'com.foodapp',
       expiresIn: '1h',
+      algorithm: 'HS256',
     })
 
     return token
@@ -17,7 +18,7 @@ export default class JwtTokenService implements ITokenService {
       const decoded = jwt.verify(token, this.privateKey)
       return decoded
     } catch (err) {
-      return 'Invalid Token'
+      return ''
     }
   }
 }
