@@ -24,18 +24,6 @@ describe('AuthRepository', () => {
     client.disconnect()
   })
 
-  it('should return user when email is found', async () => {
-    //arrange
-    const email = 'mail@mail.com'
-    const password = 'pass'
-
-    //act
-    const result = await sut.find(email)
-
-    //assert
-    expect(result).to.not.be.empty
-  })
-
   it('should return user id when added to db', async () => {
     //arrange
     const user = {

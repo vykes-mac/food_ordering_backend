@@ -29,24 +29,43 @@ describe('SignInUseCase', () => {
   })
 
   it('should throw error when user is not found', async () => {
-    const user = { email: 'wrong@email.com', password: '1234' }
+    const user = {
+      name: '',
+      email: 'wrong@email.com',
+      password: '1234',
+      auth_type: 'email',
+    }
 
     //assert
-    await expect(sut.execute(user.email, user.password)).to.be.rejectedWith(
-      'User not found'
-    )
+    await expect(
+      sut.execute(user.name, user.email, user.password, user.auth_type)
+    ).to.be.rejectedWith('Invalid email or password')
   })
 
   it('should return user id when email and password is correct', async () => {
     //act
-    const id = await sut.execute(user.email, user.password)
+    const id = await sut.execute(
+      user.name,
+      user.email,
+      user.password,
+      user.type
+    )
     //assert
     expect(id).to.be.equal(user.id)
   })
 
   it('should return user id when email is correct and type is not email', async () => {
+    //arrange
+    const user = {
+      email: 'tester@gmail.com',
+      id: '1556',
+      name: 'Ren',
+      password: '',
+      type: 'google',
+    }
+
     //act
-    const id = await sut.execute(user.email, '')
+    const id = await sut.execute(user.name, user.email, '', user.type)
     //assert
     expect(id).to.be.equal(user.id)
   })

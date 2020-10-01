@@ -5,41 +5,56 @@ import BcryptPasswordService from '../../../src/auth/data/services/BcryptPasswor
 import JwtTokenService from '../../../src/auth/data/services/JwtTokenService'
 import IAuthRepository from '../../../src/auth/domain/IAuthRepository'
 import AuthRouter from '../../../src/auth/entrypoint/AuthRouter'
+import TokenValidator from '../../../src/auth/helpers/TokenValidator'
+import ITokenStore from '../../../src/auth/services/ITokenStore'
 import FakeRepository from '../helpers/FakeRepository'
 describe('AuthRouter', () => {
   let repository: IAuthRepository
   let app: express.Application
 
   const user = {
-    email: 'baller@gg.com',
-    id: '1234',
-    name: 'Ken',
-    password: 'pass',
-    type: 'email',
+    email: 'tester@gmail.com',
+    id: '1556',
+    name: 'Ren',
+    password: '',
+    auth_type: 'google',
   }
 
   beforeEach(() => {
     repository = new FakeRepository()
     let tokenService = new JwtTokenService('privateKey')
-    let passowrdService = new BcryptPasswordService()
-
+    let passwordService = new BcryptPasswordService()
+    let tokenStore = new FakeTokenStore()
     app = express()
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
     app.use(
       '/auth',
-      AuthRouter.configure(repository, tokenService, passowrdService)
+      AuthRouter.configure(
+        repository,
+        tokenService,
+        tokenStore,
+        passwordService,
+        new TokenValidator(tokenService, tokenStore)
+      )
     )
   })
 
   it('should return 404 when user is not found', async () => {
-    await request(app).post('/auth/signin').send({}).expect(404)
+    const user = {
+      email: 'wrongemail@gg.com',
+      id: '1234',
+      name: 'Ken',
+      password: 'pass123',
+      auth_type: 'email',
+    }
+    await request(app).post('/auth/signin').send(user).expect(404)
   })
 
   it('should return 200 and token when user is found', async () => {
     await request(app)
       .post('/auth/signin')
-      .send({ email: user.email, password: user.password })
+      .send(user)
       .set('Accept', 'application/json')
       .expect('Content-type', /json/)
       .expect(200)
@@ -78,3 +93,12 @@ describe('AuthRouter', () => {
       })
   })
 })
+
+class FakeTokenStore implements ITokenStore {
+  save(token: string): void {
+    console.log(token)
+  }
+  async get(token: string): Promise<string> {
+    return token
+  }
+}
