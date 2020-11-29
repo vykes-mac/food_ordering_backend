@@ -37,7 +37,7 @@ export default class AuthRepository implements IAuthRepository {
 
     if (passwordHash) savedUser.password = passwordHash
 
-    savedUser.save()
+    await savedUser.save()
 
     return savedUser.id
   }

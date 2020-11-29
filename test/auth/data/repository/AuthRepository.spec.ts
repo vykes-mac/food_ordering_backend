@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import dotenv from 'dotenv'
+import { beforeEach } from 'mocha'
 import mongoose from 'mongoose'
 import AuthRepository from '../../../../src/auth/data/repository/AuthRepository'
 
@@ -28,18 +29,15 @@ describe('AuthRepository', () => {
     //arrange
     const user = {
       name: 'John Flyn',
-      email: 'Flyn@mail.com',
+      email: 'lyn@mail.com',
       password: 'pass232',
       type: 'email',
     }
 
     //act
-    const result = await sut.add(
-      user.name,
-      user.email,
-      user.type,
-      user.password
-    )
+    const result = await sut
+      .add(user.name, user.email, user.type, user.password)
+      .catch(() => null)
     //assert
     expect(result).to.not.be.empty
   })
