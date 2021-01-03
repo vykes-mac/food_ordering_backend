@@ -1,6 +1,6 @@
 import { Menu } from './Menu'
 import Pageable from './Pageable'
-import Restaurant from './Restaurant'
+import Restaurant, { Location } from './Restaurant'
 
 export default interface IRestaurantRepository {
   findAll(page: number, pageSize: number): Promise<Pageable<Restaurant>>
